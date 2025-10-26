@@ -190,7 +190,7 @@ def show_sidebar():
         st.sidebar.markdown('<div class="nav-section-admin"><div class="section-title">🚪 Account</div></div>', unsafe_allow_html=True)
         if st.sidebar.button("🚪 Logout", use_container_width=True, key="admin_logout_main"):
             clear_persistent_admin_login()
-            st.rerun()
+            st.switch_page("pages/Auth.py")
 
     else:
         # Not logged in

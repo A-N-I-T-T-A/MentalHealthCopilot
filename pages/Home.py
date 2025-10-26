@@ -155,19 +155,19 @@ if st.button("🧾 Analyze Emotion"):
                         
                         # Emotion-specific insights
                         emotion_insights = {
-                            'happy': {
+                            'joy': {
                                 'icon': '😊',
                                 'message': 'Great! You\'re feeling positive. This is a wonderful state to be in.',
                                 'tips': ['Share your joy with others', 'Practice gratitude', 'Engage in activities you love'],
                                 'color': '#28a745'
                             },
-                            'sad': {
+                            'sadness': {
                                 'icon': '😢',
                                 'message': 'It\'s okay to feel sad. This is a natural human emotion.',
                                 'tips': ['Allow yourself to feel', 'Reach out to loved ones', 'Practice self-compassion'],
                                 'color': '#6f42c1'
                             },
-                            'angry': {
+                            'anger': {
                                 'icon': '😠',
                                 'message': 'Anger is a valid emotion. Let\'s channel it constructively.',
                                 'tips': ['Take deep breaths', 'Identify the source', 'Express feelings calmly'],
@@ -185,11 +185,11 @@ if st.button("🧾 Analyze Emotion"):
                                 'tips': ['Take time to process', 'Embrace the unexpected', 'Stay open to new experiences'],
                                 'color': '#20c997'
                             },
-                            'disgust': {
-                                'icon': '🤢',
-                                'message': 'Disgust is a protective emotion. What\'s causing this feeling?',
-                                'tips': ['Identify the trigger', 'Create distance if needed', 'Focus on what feels good'],
-                                'color': '#6c757d'
+                            'love': {
+                                'icon': '❤️',
+                                'message': 'Love is a beautiful emotion. What brings you joy and warmth?',
+                                'tips': ['Share your feelings', 'Express gratitude', 'Cherish the moment'],
+                                'color': '#e83e8c'
                             },
                             'neutral': {
                                 'icon': '😐',

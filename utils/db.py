@@ -97,6 +97,41 @@ def delete_entry(entry_id):
     conn.commit()
     conn.close()
 
+def reset_password_with_otp(email, otp):
+    """Temporarily set user password to OTP for forgot password functionality."""
+    conn = get_connection()
+    c = conn.cursor()
+    try:
+        # Check if user exists
+        c.execute("SELECT * FROM users WHERE email=?", (email,))
+        user = c.fetchone()
+        
+        if not user:
+            return False, "User not found"
+        
+        # Update password to OTP
+        c.execute("UPDATE users SET password_hash=? WHERE email=?",
+                  (hash_password(otp), email))
+        conn.commit()
+        return True, "Password reset successfully"
+    except Exception as e:
+        return False, f"Error resetting password: {str(e)}"
+    finally:
+        conn.close()
+
+def user_exists(email):
+    """Check if user exists in database."""
+    conn = get_connection()
+    c = conn.cursor()
+    try:
+        c.execute("SELECT * FROM users WHERE email=?", (email,))
+        user = c.fetchone()
+        return user is not None
+    except Exception as e:
+        return False
+    finally:
+        conn.close()
+
 def get_entries_grouped_by_date(user):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()

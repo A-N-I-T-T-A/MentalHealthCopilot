@@ -250,6 +250,30 @@ with tab2:
 with tab3:
     st.markdown("### 🔐 Security Settings")
     
+    # Check if user is using a temporary password (6-digit OTP)
+    from utils.db import get_connection
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("SELECT password_hash FROM users WHERE email=?", (st.session_state['user'],))
+    password_hash = c.fetchone()[0]
+    conn.close()
+    
+    # Check if password is a 6-digit number (temporary OTP)
+    import hashlib
+    is_temporary_password = False
+    for i in range(100000, 1000000):  # Check all 6-digit numbers
+        if hashlib.sha256(str(i).encode()).hexdigest() == password_hash:
+            is_temporary_password = True
+            break
+    
+    if is_temporary_password:
+        st.warning("""
+        ⚠️ **Temporary Password Detected**
+        
+        You are currently using a temporary password from password reset. 
+        Please change it to a secure password for better account security.
+        """)
+    
     # Change Password Section
     st.markdown("""
     <div class="success-card">
@@ -263,24 +287,53 @@ with tab3:
         new_password = st.text_input("New Password", type="password", help="Enter your new password")
         confirm_password = st.text_input("Confirm New Password", type="password", help="Confirm your new password")
         
+        # Password requirements display (same as registration)
+        st.markdown("""
+        <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #007bff;">
+            <h6 style="margin: 0 0 5px 0; color: #495057;">🔒 Password Requirements:</h6>
+            <ul style="margin: 0; padding-left: 20px; color: #6c757d; font-size: 0.9rem;">
+                <li>At least 6 characters long</li>
+                <li>Contains at least one letter</li>
+                <li>Contains at least one number</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
         submit_password = st.form_submit_button("🔑 Update Password", type="primary")
         
         if submit_password:
+            # Validate all fields are filled
             if not all([current_password, new_password, confirm_password]):
                 st.error("❌ Please fill in all password fields.")
-            elif new_password != confirm_password:
-                st.error("❌ New passwords do not match.")
-            elif len(new_password) < 6:
-                st.error("❌ Password must be at least 6 characters long.")
             else:
-                # Verify current password and update
-                success, message = change_user_password(user, current_password, new_password)
-                if success:
-                    st.success(f"✅ {message}")
-                    # Clear the form fields after successful password change
-                    st.rerun()
+                # Validate new password strength (same as registration)
+                import re
+                password_errors = []
+                
+                if len(new_password) < 6:
+                    password_errors.append("Password must be at least 6 characters long")
+                if not re.search(r'[A-Za-z]', new_password):
+                    password_errors.append("Password must contain at least one letter")
+                if not re.search(r'\d', new_password):
+                    password_errors.append("Password must contain at least one number")
+                
+                # Check if passwords match
+                if new_password != confirm_password:
+                    password_errors.append("New passwords do not match")
+                
+                # Display validation errors
+                if password_errors:
+                    for error in password_errors:
+                        st.error(f"❌ {error}")
                 else:
-                    st.error(f"❌ {message}")
+                    # All validations passed - verify current password and update
+                    success, message = change_user_password(user, current_password, new_password)
+                    if success:
+                        st.success(f"✅ {message}")
+                        # Clear the form fields after successful password change
+                        st.rerun()
+                    else:
+                        st.error(f"❌ {message}")
     
     # Security Information
     st.markdown("""

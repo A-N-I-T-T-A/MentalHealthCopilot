@@ -1,8 +1,9 @@
 # pages/Auth.py
 import streamlit as st
 import re
-from utils.db import init_db, register_user, login_user, create_admins_table, login_admin
+from utils.db import init_db, register_user, login_user, create_admins_table, login_admin, reset_password_with_otp, user_exists
 from utils.auth import set_persistent_login, clear_persistent_login, set_persistent_admin_login, clear_persistent_admin_login
+from utils.email_utils import generate_otp, send_otp_email
 
 # Validation functions
 def validate_email(email):
@@ -98,11 +99,11 @@ elif "admin" in st.session_state:
     with col2:
         if st.button("🚪 Admin Logout"):
             clear_persistent_admin_login()
-            st.rerun()
+            st.switch_page("pages/Auth.py")
     
 else:
     # --- Create tabs for different login types ---
-    tab1, tab2, tab3 = st.tabs(["👤 User Login", "🆕 User Register", "🔐 Admin Login"])
+    tab1, tab2, tab3, tab4 = st.tabs(["👤 User Login", "🆕 User Register", "🔐 Admin Login", "🔑 Forgot Password"])
     
     # Tab 1: User Login
     with tab1:
@@ -131,7 +132,6 @@ else:
                     else:
                         st.error("❌ Invalid email or password. Please check your credentials and try again.")
         
-        st.markdown("[Forgot Password?](#)", unsafe_allow_html=True)
     
     # Tab 2: User Registration
     with tab2:
@@ -203,5 +203,51 @@ else:
                         st.switch_page("pages/Admin.py")
                     else:
                         st.error("❌ Invalid admin credentials. Please check your email and password.")
+    
+    # Tab 4: Forgot Password
+    with tab4:
+        st.subheader("🔑 Reset Your Password")
+        st.markdown("<p style='text-align: center; color: gray;'>Enter your email to receive a temporary password.</p>", unsafe_allow_html=True)
         
-        st.info("💡 **Default Admin Credentials:** admin@mentalhealth.com / admin123")
+        with st.form("forgot_password_form"):
+            email = st.text_input("📧 Email", placeholder="user@example.com", help="Enter your registered email address")
+            submit = st.form_submit_button("📧 Send Reset Code", type="primary", use_container_width=True)
+            
+            if submit:
+                # Validate email
+                if not email:
+                    st.error("❌ Please enter your email address.")
+                elif not validate_email(email):
+                    st.error("❌ Please enter a valid email address.")
+                else:
+                    # Check if user exists
+                    if not user_exists(email):
+                        st.error("❌ No account found with this email address.")
+                    else:
+                        # Generate OTP and send email
+                        otp = generate_otp()
+                        success, message = send_otp_email(email, otp)
+                        
+                        if success:
+                            # Update user's password to OTP
+                            reset_success, reset_message = reset_password_with_otp(email, otp)
+                            
+                            if reset_success:
+                                st.success("✅ Password reset code sent successfully!")
+                                st.info(f"📧 **Check your email ({email}) for the 6-digit code**")
+                                st.warning("⚠️ **Important Instructions:**")
+                                st.markdown("""
+                                1. **Check your email inbox** (and spam folder if needed)
+                                2. **Use the 6-digit code as your temporary password** to login
+                                3. **After logging in**, go to your **Profile page**
+                                4. **Change your password** to something secure
+                                5. **This code expires in 10 minutes**
+                                """)
+                                
+                                st.info("🔄 **Ready to login?** Switch to the **User Login** tab and use the code from your email as your password.")
+                            else:
+                                st.error(f"❌ {reset_message}")
+                        else:
+                            st.error(f"❌ {message}")
+        
+        
