@@ -66,11 +66,7 @@ A comprehensive AI-powered mental health tracking and wellness platform built wi
    - Generate App Password in Google Account Settings
    - Use App Password in `.env` file
 
-### Default Admin Access
-- **Email**: admin@mentalhealth.com
-- **Password**: admin123
 
-⚠️ **Change admin password after first login!**
 
 ## 🛠️ Technology Stack
 
