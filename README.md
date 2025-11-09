@@ -66,7 +66,10 @@ A comprehensive AI-powered mental health tracking and wellness platform built wi
    - Generate App Password in Google Account Settings
    - Use App Password in `.env` file
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ea4387dc04619a1a2f34ddc2b46ca7ca4ac555ce
 
 ## 🛠️ Technology Stack
 
