@@ -17,59 +17,6 @@ A comprehensive AI-powered mental health tracking and wellness platform built wi
 - **Data Export** - CSV export with chart data for analysis
 - **Real-time Monitoring** - System health and activity tracking
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.11+
-- pip
-- Git
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <your-repository-url>
-   cd MentalHealthCopilot
-   ```
-
-2. **Set up virtual environment**
-   ```bash
-   python -m venv myvenv
-   # Windows:
-   myvenv\Scripts\activate
-   # macOS/Linux:
-   source myvenv/bin/activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configure environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your email credentials
-   ```
-
-5. **Run the application**
-   ```bash
-   streamlit run app.py
-   ```
-
-## 🔐 Environment Setup
-
-### Email Configuration
-1. Copy `.env.example` to `.env`
-2. Set up Gmail App Password:
-   - Enable 2-Factor Authentication
-   - Generate App Password in Google Account Settings
-   - Use App Password in `.env` file
-
-<<<<<<< HEAD
-
-=======
->>>>>>> ea4387dc04619a1a2f34ddc2b46ca7ca4ac555ce
 
 ## 🛠️ Technology Stack
 
@@ -105,13 +52,6 @@ MentalHealthCopilot/
 └── SETUP.md             # Detailed setup guide
 ```
 
-## 🔒 Security Features
-
-- **Password Hashing**: SHA-256 encryption
-- **Environment Variables**: Secure credential storage
-- **Session Management**: Secure user sessions
-- **Input Validation**: Comprehensive data validation
-- **SQL Injection Prevention**: Parameterized queries
 
 ## 📈 Data Analytics
 
@@ -121,38 +61,3 @@ MentalHealthCopilot/
 - **Emotion Distribution**: System-wide emotion analysis
 - **Export Capabilities**: CSV export with chart data
 
-## 🚀 Deployment
-
-### Local Development
-```bash
-streamlit run app.py
-```
-
-### Production
-1. Set environment variables on hosting platform
-2. Configure email credentials
-3. Deploy using your preferred service
-
-## 📝 License
-
-This project is for educational and research purposes.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 📞 Support
-
-For issues and questions, please create an issue in the repository.
-
-## 🔗 Links
-
-- [Setup Guide](SETUP.md)
-- [Admin Documentation](ADMIN_README.md)
-
----
-
-**Built with ❤️ for mental health awareness and support**
